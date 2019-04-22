@@ -99,3 +99,6 @@ ENV/
 # test
 #uploads
 app/static/uploads/*
+
+
+node_modules/
