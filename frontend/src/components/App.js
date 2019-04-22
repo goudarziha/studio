@@ -5,13 +5,9 @@ import Video from "./Video";
 import Gallery from "./Gallery";
 import Main from "./layouts/Main";
 import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
-import { createStore, applyMiddleware } from "redux";
 
 import { Provider } from "react-redux";
-import thunk from "redux-thunk";
-import rootReducer from "../reducers";
-
-const store = createStore(rootReducer, applyMiddleware(thunk));
+import store from "../store";
 
 const routing = (
   <Provider store={store}>
@@ -19,7 +15,7 @@ const routing = (
       <div className="container">
         <Header />
         <Switch>
-          <Route exact path="/" component={Main} />
+          <Route exact path="/" component={Video} />
           <Route path="/gallery" component={Gallery} />
         </Switch>
       </div>

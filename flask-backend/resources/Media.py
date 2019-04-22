@@ -3,15 +3,21 @@ from flask_restful import Resource, reqparse
 from Model import db, Media, MediaSchema
 import werkzeug
 import uuid
-import os, json
+import os
+import json
+import subprocess
+from utils.renders import time_symmatry_overlay
 
-media_schema = MediaSchema()
+media_schema = MediaSchema(many=True)
 
 
 class MediaResource(Resource):
     def get(self):
         medias = Media.query.all()
         medias = media_schema.dump(medias).data
+        out = subprocess.Popen('ffmpeg', shell=True, stdout=subprocess.PIPE)
+        stdout, stderr = out.communicate()
+        print(stdout)
         return {
             'status': 'success',
             'data': medias
@@ -22,14 +28,22 @@ class MediaResource(Resource):
         file = request.files['file']
         extension = os.path.splitext(file.filename)[1]
         f_name = str(uuid.uuid4()) + extension
-        f_path = os.path.join(current_app.config['UPLOAD_FOLDER'], f_name)
+        f_path = os.path.join(current_app.config['TMP_DIR'], f_name)
         rel_path = f_path.split('static/')[1]
         file.save(f_path)
-        new_media = Media(filename=f_name, file_url=rel_path)
+
+        final_path = os.path.join(
+            current_app.config['MEDIA_DIR'], f_name + '.mp4')
+
+        overlay_path = os.path.join(
+            current_app.config['OVERLAY_DIR'], 'overlay.png')
+
+        time_symmatry_overlay(f_path, overlay_path, 2.0, 1.0, final_path)
+        new_media = Media(filename=f_name + '.mp4',
+                          file_url=final_path.split('static/')[1])
         db.session.add(new_media)
         db.session.commit()
-        return json.dumps({'filename':f_name, 'file_path': rel_path, 'id': new_media.id})
-
+        return json.dumps({'filename': f_name, 'file_path': rel_path, 'id': new_media.id})
 
     def put(self):
         json_data = request.get_json(force=True)

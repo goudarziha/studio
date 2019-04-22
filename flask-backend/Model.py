@@ -22,5 +22,6 @@ class Media(db.Model):
 
 class MediaSchema(ma.Schema):
     id = fields.Integer()
+    created = fields.String()
     filename = fields.String()
     file_url = fields.String()

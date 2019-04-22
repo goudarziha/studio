@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import Header from "./layouts/Header";
-import Video from "./Video";
+
 import RecordRTC from "recordrtc";
 import axios, { post } from "axios";
 
-class App extends Component {
+class Video extends Component {
   constructor(props) {
     super(props);
 
@@ -32,15 +31,20 @@ class App extends Component {
       navigator.getUserMedia(
         {
           audio: true,
-          video: true
+          video: {
+            height: 720,
+            width: 1280
+          }
         },
         stream => {
           const videoRecorder = RecordRTC(stream, {
             type: "video",
             video: {
-              width: 1080,
+              width: 1280,
               height: 720,
-              frameRate: 60
+              frameRate: { exact: 60 },
+              videoBitsPerSecond: 51200000,
+              mimeType: "video/webm"
             }
           });
           const vid = document.getElementById("video");
@@ -129,7 +133,6 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <Header />
         <video id="video" className="video" autoPlay muted />
         {!this.state.isRecording && (
           <button onClick={this.handleStartRecord.bind(this)}>Record</button>
