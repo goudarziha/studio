@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-
 import RecordRTC from "recordrtc";
-import axios, { post } from "axios";
+import axios from "axios";
+import Header from "../components/layouts/Header";
 
 class Video extends Component {
   constructor(props) {
@@ -20,6 +20,12 @@ class Video extends Component {
     isDone: false,
     pausing: false
   };
+
+  componentDidMount() {
+    this.setState({
+      videoRecorder: null
+    });
+  }
 
   setup() {
     navigator.getUserMedia =
@@ -79,7 +85,7 @@ class Video extends Component {
           console.log(response);
         });
       }.bind(this),
-      10000
+      12000
     );
   }
 
@@ -133,6 +139,7 @@ class Video extends Component {
   render() {
     return (
       <div className="container">
+        <Header />
         <video id="video" className="video" autoPlay muted />
         {!this.state.isRecording && (
           <button onClick={this.handleStartRecord.bind(this)}>Record</button>
