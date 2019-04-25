@@ -39,17 +39,15 @@ class Video extends Component {
           audio: true,
           video: {
             height: 720,
-            width: 1280
+            width: 1280,
+            frameRate: { exact: 60 }
           }
         },
         stream => {
           const videoRecorder = RecordRTC(stream, {
             type: "video",
             video: {
-              width: 1280,
-              height: 720,
-              frameRate: { exact: 60 },
-              videoBitsPerSecond: 5120000,
+              videoBitsPerSecond: 51200000,
               mimeType: "video/webm"
             }
           });
