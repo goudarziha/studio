@@ -105,25 +105,29 @@ export class Gallery extends Component {
         right: "auto",
         bottom: "auto",
         marginRight: "-50%",
-
         transform: "translate(-50%, -50%)"
       }
     };
+
     return (
       <div>
-        <h2>GALLERY</h2>
+        <div className="d-flex justify-content-center m-5">
+          <h2>GALLERY</h2>
+        </div>
 
         <Modal
           isOpen={this.state.showModal}
           onRequestClose={this.hideModal.bind(this)}
           style={customStyles}
         >
-          <div className="container">
-            <div className="d-flex flex-column justify-content-start">
+          <div className="w-100">
+            <div className="d-flex flex-column justify-content-start w-100">
               <h4>Enter Your Email</h4>
-              <form onSubmit={this.onEmailSubmit}>
+              <form onSubmit={this.onEmailSubmit} className="mt-3 pt-3">
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email" className="">
+                    Email
+                  </label>
                   <input
                     type="email"
                     name="email"
@@ -131,37 +135,42 @@ export class Gallery extends Component {
                   />
                 </div>
 
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
-                <button
-                  onClick={this.hideModal.bind(this)}
-                  className="btn btn-danger"
-                >
-                  Cancel
-                </button>
+                <div className="d-flex justify-content-end mt-5">
+                  <button
+                    onClick={this.hideModal.bind(this)}
+                    className="btn btn-danger pr-3"
+                  >
+                    Cancel
+                  </button>
+
+                  <button type="submit" className="btn btn-secondary ml-3">
+                    Submit
+                  </button>
+                </div>
               </form>
             </div>
           </div>
         </Modal>
 
         <div className="gallery">
-          {this.props.gallery.map(item => (
-            <div
-              className="gallery__item"
-              key={item.id}
-              onClick={() => this.handleClick(item.id)}
-            >
-              <video
-                className="gallery__video"
-                autoPlay
-                loop
-                muted
+          {this.props.gallery
+            .map(item => (
+              <div
+                className="gallery__item"
                 key={item.id}
-                src={[this.state.url + "static/" + item.file_url].toString()}
-              />
-            </div>
-          ))}
+                onClick={() => this.handleClick(item.id)}
+              >
+                <video
+                  className="gallery__video"
+                  autoPlay
+                  loop
+                  muted
+                  key={item.id}
+                  src={[this.state.url + "static/" + item.file_url].toString()}
+                />
+              </div>
+            ))
+            .reverse()}
         </div>
       </div>
     );

@@ -7,7 +7,8 @@ import uuid
 import os
 import json
 import subprocess
-from utils.renders import time_symmatry_overlay, studio
+from utils.renders import time_symmatry_overlay, studio, studio_func
+import threading
 
 media_schema = MediaSchema(many=True)
 
@@ -36,8 +37,11 @@ class MediaResource(Resource):
             current_app.config['OVERLAY_DIR'], 'overlay.png')
 
         # time_symmatry_overlay(f_path, overlay_path, 2.0, 1.0, final_path)
-        cmd = studio(f_path, overlay_path, 0.9, final_path)
-        subprocess.call(cmd, shell=True)
+        # cmd = studio(f_path, overlay_path, 0.9, final_path)
+        # subprocess.call(cmd, shell=True)
+        t1 = threading.Thread(target=studio_func(
+            f_path, overlay_path, 0.9, final_path))
+        t1.start()
 
         new_media = Media(filename=f_name + '.mp4',
                           file_url=final_path.split('static/')[1])

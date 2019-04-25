@@ -49,7 +49,7 @@ class Video extends Component {
               width: 1280,
               height: 720,
               frameRate: { exact: 60 },
-              videoBitsPerSecond: 51200000,
+              videoBitsPerSecond: 5120000,
               mimeType: "video/webm"
             }
           });
